@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.4</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>com.mfh</groupId>
+  <artifactId>spring-angular</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>trueAct-frontend-war-builder</name>
+  <description>trueAct frontend war builder</description>
+  <properties>
+    <java.version>1.8</java.version>
+    <ticket-frontend-src>/Users/faysal-welldev/Projects/wtag/trueact-frontend/frontend</ticket-frontend-src>
+    <ticket-frontend-src-dist>/Users/faysal-welldev/Projects/wtag/trueact-frontend/frontend/dist/frontend
+    </ticket-frontend-src-dist>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-starter-tomcat</artifactId>-->
+    <!--      <scope>provided</scope>-->
+    <!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <!-- Install node and npm for Angular and Gulp and build frontend application -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.12.0</version>
+
+        <configuration>
+          <nodeVersion>v14.15.0</nodeVersion>
+          <npmVersion>6.14.5</npmVersion>
+          <workingDirectory>${ticket-frontend-src}</workingDirectory>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>npm run build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+
+            <configuration>
+              <arguments>run build</arguments>
+              <workingDirectory>${ticket-frontend-src}</workingDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <nonFilteredFileExtensions>
+            <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+            <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+            <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+            <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+            <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+            <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+            <nonFilteredFileExtension>png</nonFilteredFileExtension>
+            <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+            <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+            <nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
+            <nonFilteredFileExtensions>jpg</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>jpeg</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>gif</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>bmp</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>png</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>ico</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>jsp</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>tag</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>ttf</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>woff</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>woff2</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>svg</nonFilteredFileExtensions>
+            <nonFilteredFileExtensions>js</nonFilteredFileExtensions>
+          </nonFilteredFileExtensions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes/static/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${ticket-frontend-src-dist}</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+      <!--      <resource>-->
+      <!--        <directory>src/frontend/dist/frontend</directory>-->
+      <!--        <targetPath>static</targetPath>-->
+      <!--        <filtering>true</filtering>-->
+      <!--      </resource>-->
+    </resources>
+  </build>
+
+</project>
